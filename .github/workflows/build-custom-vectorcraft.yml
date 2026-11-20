@@ -1,8 +1,8 @@
 name: Build custom VectorCraft (school font library)
 
 # Builds the official VectorCraft v0.24.1 web release with one patch
-# (scripts/patch_vectorcraft_source.py): the app also loads the fonts listed in
-# fonts/manifest.txt. The zip is uploaded as an artifact; import it with
+# (scripts/patch_vectorcraft_source.py, scripts/patch_student_layout.py): school font library,
+# recovery copies in IndexedDB and a simpler first view for students. The zip is uploaded as an artifact; import it with
 # scripts/import_custom_build.py and commit custom-build/ to deploy it.
 
 on:
@@ -40,9 +40,10 @@ jobs:
           ref: ${{ env.CRAFT_FONTS_REF }}
           path: craft-fonts
           persist-credentials: false
-      - name: Apply school font library patch
+      - name: Apply school patches (fonts, recovery, student layout)
         run: |
           python3 scripts/patch_vectorcraft_source.py upstream
+          python3 scripts/patch_student_layout.py upstream
           git -C upstream diff > vectorcraft-source.patch
           cat vectorcraft-source.patch
       - uses: dtolnay/rust-toolchain@stable
@@ -74,7 +75,7 @@ jobs:
               'craft_fonts_ref': os.environ['CRAFT_FONTS_REF'],
               'workflow_run': int(os.environ['GITHUB_RUN_ID']),
               'built': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
-              'patch': 'scripts/patch_vectorcraft_source.py',
+              'patches': ['scripts/patch_vectorcraft_source.py', 'scripts/patch_student_layout.py'],
           }, open('BUILD.json', 'w'), indent=2)
           PY
       - uses: actions/upload-artifact@v4
