@@ -1,6 +1,10 @@
 import { egui_text_agent_activate } from './snippets/eframe-d31a8450ea12dfc1/inline0.js';
+import { vc_recovery_delete, vc_recovery_put } from './snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js';
 import * as import1 from "./snippets/eframe-d31a8450ea12dfc1/inline0.js"
 import * as import2 from "./snippets/eframe-d31a8450ea12dfc1/inline0.js"
+import * as import3 from "./snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js"
+import * as import4 from "./snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js"
+import * as import5 from "./snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js"
 
 function __wbg_get_imports() {
     const import0 = {
@@ -1031,6 +1035,10 @@ function __wbg_get_imports() {
             const ret = arg0[arg1 >>> 0];
             return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
         },
+        __wbg_get_6c896e0571ddae51: function(arg0, arg1) {
+            const ret = arg0[arg1 >>> 0];
+            return ret;
+        },
         __wbg_get_9356b22e2a46465d: function(arg0, arg1) {
             const ret = arg0[arg1 >>> 0];
             return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
@@ -1311,6 +1319,10 @@ function __wbg_get_imports() {
         }, arguments); },
         __wbg_isActive_c6868ea0a8a0dfaf: function(arg0) {
             const ret = arg0.isActive;
+            return ret;
+        },
+        __wbg_isArray_e15a2ff68ffdbef2: function(arg0) {
+            const ret = Array.isArray(arg0);
             return ret;
         },
         __wbg_isComposing_600c9236938f8e5a: function(arg0) {
@@ -2959,6 +2971,12 @@ function __wbg_get_imports() {
             getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
             getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
         },
+        __wbg_vc_recovery_delete_3865fdf3c93f0802: function(arg0, arg1) {
+            vc_recovery_delete(getStringFromWasm0(arg0, arg1));
+        },
+        __wbg_vc_recovery_put_3013af3885be6940: function(arg0, arg1, arg2, arg3) {
+            vc_recovery_put(getStringFromWasm0(arg0, arg1), getArrayU8FromWasm0(arg2, arg3));
+        },
         __wbg_vertexAttribDivisorANGLE_659fb027198a47c3: function(arg0, arg1, arg2) {
             arg0.vertexAttribDivisorANGLE(arg1 >>> 0, arg2 >>> 0);
         },
@@ -3045,12 +3063,12 @@ function __wbg_get_imports() {
             return ret;
         },
         __wbindgen_generic_0000000000000008: function(arg0, arg1) {
-            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("GPUDevice")], shim_idx: 14731, ret: Result(Unit), inner_ret: Some(Result(Unit)) }, mutable: true }) -> Externref`.
+            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("GPUDevice")], shim_idx: 14733, ret: Result(Unit), inner_ret: Some(Result(Unit)) }, mutable: true }) -> Externref`.
             const ret = makeMutClosure(arg0, arg1, wasm_bindgen_94ce7e60f46aeaae___convert__closures_____invoke___wasm_bindgen_94ce7e60f46aeaae___sys__JsNullable_wgpu_fb03043e4473d4d2___backend__webgpu__webgpu_sys__gen_GpuAdapter__GpuAdapter___core_d941ad8722425d2e___result__Result_____wasm_bindgen_94ce7e60f46aeaae___JsError___true_);
             return ret;
         },
         __wbindgen_generic_0000000000000009: function(arg0, arg1) {
-            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("GPUDeviceLostInfo")], shim_idx: 14735, ret: Unit, inner_ret: Some(Unit) }, mutable: true }) -> Externref`.
+            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("GPUDeviceLostInfo")], shim_idx: 14737, ret: Unit, inner_ret: Some(Unit) }, mutable: true }) -> Externref`.
             const ret = makeMutClosure(arg0, arg1, wasm_bindgen_94ce7e60f46aeaae___convert__closures_____invoke___wgpu_fb03043e4473d4d2___backend__webgpu__webgpu_sys__gen_GpuDeviceLostInfo__GpuDeviceLostInfo______true_);
             return ret;
         },
@@ -3060,12 +3078,12 @@ function __wbg_get_imports() {
             return ret;
         },
         __wbindgen_generic_000000000000000b: function(arg0, arg1) {
-            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("any")], shim_idx: 14731, ret: Result(Unit), inner_ret: Some(Result(Unit)) }, mutable: true }) -> Externref`.
+            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("any")], shim_idx: 14733, ret: Result(Unit), inner_ret: Some(Result(Unit)) }, mutable: true }) -> Externref`.
             const ret = makeMutClosure(arg0, arg1, wasm_bindgen_94ce7e60f46aeaae___convert__closures_____invoke___wasm_bindgen_94ce7e60f46aeaae___sys__JsNullable_wgpu_fb03043e4473d4d2___backend__webgpu__webgpu_sys__gen_GpuAdapter__GpuAdapter___core_d941ad8722425d2e___result__Result_____wasm_bindgen_94ce7e60f46aeaae___JsError___true__11);
             return ret;
         },
         __wbindgen_generic_000000000000000c: function(arg0, arg1) {
-            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("undefined")], shim_idx: 14731, ret: Result(Unit), inner_ret: Some(Result(Unit)) }, mutable: true }) -> Externref`.
+            // Cast intrinsic for `Closure(Closure { owned: true, function: Function { arguments: [NamedExternref("undefined")], shim_idx: 14733, ret: Result(Unit), inner_ret: Some(Result(Unit)) }, mutable: true }) -> Externref`.
             const ret = makeMutClosure(arg0, arg1, wasm_bindgen_94ce7e60f46aeaae___convert__closures_____invoke___wasm_bindgen_94ce7e60f46aeaae___sys__JsNullable_wgpu_fb03043e4473d4d2___backend__webgpu__webgpu_sys__gen_GpuAdapter__GpuAdapter___core_d941ad8722425d2e___result__Result_____wasm_bindgen_94ce7e60f46aeaae___JsError___true__12);
             return ret;
         },
@@ -3174,6 +3192,9 @@ function __wbg_get_imports() {
         "./vectorcraft-web_bg.js": import0,
         "./snippets/eframe-d31a8450ea12dfc1/inline0.js": import1,
         "./snippets/eframe-d31a8450ea12dfc1/inline0.js": import2,
+        "./snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js": import3,
+        "./snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js": import4,
+        "./snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js": import5,
     };
 }
 

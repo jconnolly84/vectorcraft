@@ -138,10 +138,18 @@ index 2677c11..b9c3c5b 100644
 +    });
 +}
 diff --git a/apps/vectorcraft-web/src/web.rs b/apps/vectorcraft-web/src/web.rs
-index b4ca434..3bdcc6a 100644
+index b4ca434..866ddea 100644
 --- a/apps/vectorcraft-web/src/web.rs
 +++ b/apps/vectorcraft-web/src/web.rs
-@@ -116,6 +116,7 @@ async fn run(host: Host, canvas: web_sys::HtmlCanvasElement, moving: Option<Movi
+@@ -72,6 +72,7 @@ pub fn start() {
+     wasm_bindgen_futures::spawn_local(async move {
+         // Before the first frame, which looks for copies a crash left behind.
+         let locks = WebLocks::start(RECOVERY_PREFIX).await;
++        idb_recovery::start().await;
+         // Fallback fonts the first frame needs (Noto Sans Arabic), fetched while the loading text
+         // shows; the rest load in the background once the app runs.
+         crate::fonts::load_startup_fonts().await;
+@@ -116,6 +117,7 @@ async fn run(host: Host, canvas: web_sys::HtmlCanvasElement, moving: Option<Movi
                  VectorcraftApp::install_ime_reset_hooks(&cc.egui_ctx);
                  let ctx = &cc.egui_ctx;
                  crate::fonts::spawn_background_fonts(ctx.clone());
@@ -149,3 +157,314 @@ index b4ca434..3bdcc6a 100644
                  let loss = GraphicsLoss::default();
                  watch_canvas(&page, &loss, ctx);
                  if let Some(rs) = &cc.wgpu_render_state {
+@@ -566,20 +568,41 @@ fn local_storage() -> Result<web_sys::Storage, String> {
+ 
+ impl RecoveryStore for BrowserStore {
+     fn list(&self) -> Result<Vec<String>, String> {
++        if let Some(names) = idb_recovery::list() {
++            return Ok(names);
++        }
+         let s = local_storage()?;
+         let n = s.length().map_err(js_err)?;
+         Ok((0..n).filter_map(|i| s.key(i).ok().flatten()).filter_map(|k| k.strip_prefix(RECOVERY_PREFIX).map(str::to_string)).collect())
+     }
+     fn read(&self, name: &str) -> Result<Vec<u8>, String> {
++        // School build: where the browser has Web Locks, a tab holds its area's lock until it is
++        // closed or crashes, so an area whose lock nobody holds has no running tab: its heartbeat is
++        // ignored and its copies are offered at once (upstream waits until the heartbeat is three
++        // minutes old, so a student reopening straight after a crash would not be offered them).
++        if let Some(area) = name.strip_suffix("/heartbeat")
++            && self.locks.as_ref().is_some_and(|l| !l.held(area))
++        {
++            return Err(format!("{name}: no tab holds this area"));
++        }
++        if let Some(r) = idb_recovery::read(name) {
++            return r;
++        }
+         let text = local_storage()?.get_item(&format!("{RECOVERY_PREFIX}{name}")).map_err(js_err)?;
+         text.and_then(|t| vectorcraft_format::base64_decode(&t)).ok_or_else(|| format!("{name}: no such recovery entry"))
+     }
+     fn write(&self, name: &str, bytes: &[u8]) -> Result<(), String> {
++        if let Some(r) = idb_recovery::write(name, bytes) {
++            return r;
++        }
+         local_storage()?
+             .set_item(&format!("{RECOVERY_PREFIX}{name}"), &vectorcraft_format::base64_encode(bytes))
+             .map_err(|e| format!("browser storage is full or turned off: {}", js_err(e)))
+     }
+     fn remove(&self, name: &str) -> Result<(), String> {
++        if let Some(r) = idb_recovery::remove(name) {
++            return r;
++        }
+         local_storage()?.remove_item(&format!("{RECOVERY_PREFIX}{name}")).map_err(js_err)
+     }
+     fn location(&self) -> String {
+@@ -682,3 +705,158 @@ fn print_pdf(pdf: &[u8]) -> Result<(), String> {
+     document.body().ok_or("no body")?.append_child(&frame).map_err(js_err)?;
+     Ok(())
+ }
++
++
++// ---- School patch: Data Recovery copies in IndexedDB (scripts/patch_vectorcraft_source.py) ----
++mod idb_recovery {
++    use std::collections::BTreeMap;
++    use std::sync::Mutex;
++    use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
++
++    use wasm_bindgen::JsCast as _;
++    use wasm_bindgen::prelude::*;
++
++    #[wasm_bindgen(inline_js = r#"
++const PREFIX = 'vectorcraft-recovery/';
++let dbp = null;
++function db() {
++  if (!dbp) dbp = new Promise((resolve, reject) => {
++    const r = indexedDB.open('vectorcraft-recovery', 1);
++    r.onupgradeneeded = () => r.result.createObjectStore('entries');
++    r.onsuccess = () => { r.result.onversionchange = () => r.result.close(); resolve(r.result); };
++    r.onerror = () => reject(r.error);
++    r.onblocked = () => reject(new Error('recovery storage blocked'));
++  });
++  return dbp;
++}
++async function migrate(d) {
++  const keys = [];
++  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(PREFIX)) keys.push(k); } } catch { return; }
++  if (!keys.length) return;
++  await new Promise((resolve, reject) => {
++    const t = d.transaction('entries', 'readwrite');
++    const s = t.objectStore('entries');
++    for (const k of keys) {
++      try {
++        const bin = atob(localStorage.getItem(k) || '');
++        const b = new Uint8Array(bin.length);
++        for (let i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
++        s.put(b, k.slice(PREFIX.length));
++      } catch (e) { console.warn('recovery: could not move', k, e); }
++    }
++    t.oncomplete = resolve; t.onerror = () => reject(t.error); t.onabort = () => reject(t.error);
++  });
++  for (const k of keys) { try { localStorage.removeItem(k); } catch {} }
++}
++export async function vc_recovery_load() {
++  const d = await db();
++  await migrate(d);
++  return await new Promise((resolve, reject) => {
++    const t = d.transaction('entries', 'readonly');
++    const s = t.objectStore('entries');
++    const keys = s.getAllKeys(), values = s.getAll();
++    t.oncomplete = () => resolve(keys.result.map((k, i) => [String(k), values.result[i]]));
++    t.onerror = () => reject(t.error);
++  });
++}
++export function vc_recovery_put(key, bytes) {
++  const copy = bytes.slice();
++  db().then(d => {
++    const t = d.transaction('entries', 'readwrite');
++    t.objectStore('entries').put(copy, key);
++    t.onerror = t.onabort = () => console.warn('recovery: could not store', key, t.error);
++  }).catch(e => console.warn('recovery: storage unavailable', e));
++}
++export function vc_recovery_delete(key) {
++  db().then(d => { d.transaction('entries', 'readwrite').objectStore('entries').delete(key); })
++    .catch(e => console.warn('recovery: storage unavailable', e));
++}
++export function vc_recovery_enabled() {
++  try { return localStorage.getItem('vectorcraft.recovery.enabled') !== 'false'; } catch { return true; }
++}
++export function vc_sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
++"#)]
++    extern "C" {
++        fn vc_recovery_load() -> js_sys::Promise;
++        fn vc_recovery_put(key: &str, bytes: &[u8]);
++        fn vc_recovery_delete(key: &str);
++        fn vc_recovery_enabled() -> bool;
++        fn vc_sleep(ms: i32) -> js_sys::Promise;
++    }
++
++    static MIRROR: Mutex<BTreeMap<String, Vec<u8>>> = Mutex::new(BTreeMap::new());
++    /// Bumped by every write and remove: a refresh read while it changed is dropped.
++    static GENERATION: AtomicU64 = AtomicU64::new(0);
++    static READY: AtomicBool = AtomicBool::new(false);
++    const REFRESH_MS: i32 = 10_000;
++
++    fn mirror() -> std::sync::MutexGuard<'static, BTreeMap<String, Vec<u8>>> {
++        MIRROR.lock().unwrap_or_else(std::sync::PoisonError::into_inner)
++    }
++
++    async fn fetch_all() -> Option<BTreeMap<String, Vec<u8>>> {
++        let value = wasm_bindgen_futures::JsFuture::from(vc_recovery_load()).await.map_err(|e| log::warn!("recovery storage: {e:?}")).ok()?;
++        let entries: js_sys::Array = value.dyn_into().ok()?;
++        let mut map = BTreeMap::new();
++        for entry in entries.iter() {
++            let pair: js_sys::Array = entry.dyn_into().ok()?;
++            let key = pair.get(0).as_string()?;
++            map.insert(key, js_sys::Uint8Array::new(&pair.get(1)).to_vec());
++        }
++        Some(map)
++    }
++
++    /// Load the copies before the app starts, then keep the mirror fresh.
++    pub async fn start() {
++        let Some(map) = fetch_all().await else {
++            log::warn!("recovery: IndexedDB unavailable, using local storage");
++            return;
++        };
++        log::info!("recovery: {} entries in IndexedDB", map.len());
++        *mirror() = map;
++        READY.store(true, Ordering::SeqCst);
++        wasm_bindgen_futures::spawn_local(async {
++            loop {
++                let _ = wasm_bindgen_futures::JsFuture::from(vc_sleep(REFRESH_MS)).await;
++                let generation = GENERATION.load(Ordering::SeqCst);
++                if let Some(map) = fetch_all().await
++                    && GENERATION.load(Ordering::SeqCst) == generation
++                {
++                    *mirror() = map;
++                }
++            }
++        });
++    }
++
++    pub fn list() -> Option<Vec<String>> {
++        READY.load(Ordering::SeqCst).then(|| mirror().keys().cloned().collect())
++    }
++
++    pub fn read(name: &str) -> Option<Result<Vec<u8>, String>> {
++        READY.load(Ordering::SeqCst).then(|| mirror().get(name).cloned().ok_or_else(|| format!("{name}: no such recovery entry")))
++    }
++
++    pub fn write(name: &str, bytes: &[u8]) -> Option<Result<(), String>> {
++        if !READY.load(Ordering::SeqCst) {
++            return None;
++        }
++        if !vc_recovery_enabled() {
++            // Switched off in the host page's Recovery panel.
++            return Some(Ok(()));
++        }
++        GENERATION.fetch_add(1, Ordering::SeqCst);
++        mirror().insert(name.to_string(), bytes.to_vec());
++        vc_recovery_put(name, bytes);
++        Some(Ok(()))
++    }
++
++    pub fn remove(name: &str) -> Option<Result<(), String>> {
++        if !READY.load(Ordering::SeqCst) {
++            return None;
++        }
++        GENERATION.fetch_add(1, Ordering::SeqCst);
++        mirror().remove(name);
++        vc_recovery_delete(name);
++        Some(Ok(()))
++    }
++}
+diff --git a/crates/engine/src/prefs.rs b/crates/engine/src/prefs.rs
+index aa8b5c7..ec77964 100644
+--- a/crates/engine/src/prefs.rs
++++ b/crates/engine/src/prefs.rs
+@@ -489,7 +489,7 @@ impl Default for Prefs {
+             background_save: true,
+             background_export: true,
+             autosave_recovery: true,
+-            autosave_interval: 2,
++            autosave_interval: 1,
+             recovery_folder: String::new(),
+             recovery_off_for_complex: false,
+             recent_files_count: 20,
+diff --git a/crates/ui-egui/src/panel_docking.rs b/crates/ui-egui/src/panel_docking.rs
+index ef50276..9c5dafd 100644
+--- a/crates/ui-egui/src/panel_docking.rs
++++ b/crates/ui-egui/src/panel_docking.rs
+@@ -155,17 +155,27 @@ pub(crate) fn with_canvas(columns: Vec<Column<String>>, floating: Vec<Floating<S
+ fn default_from(tab: DockTab, order: &[DockTab], collapsed: bool, width: Option<f32>, front: Option<&str>) -> Layout<String> {
+     let mut placed = Placed::default();
+     let panels: Vec<String> = main_tabs(order).into_iter().filter_map(|t| placed.take(t.info().0)).collect();
+-    let active = panels.iter().position(|p| p == tab.info().0).unwrap_or(0);
++    // School build (scripts/patch_student_layout.py): Properties on top, Layers open beneath it.
++    let (top, below): (Vec<String>, Vec<String>) = panels.iter().cloned().partition(|p| p != "layers" && p != "libraries");
++    let active = top.iter().position(|p| p == tab.info().0).unwrap_or(0);
++    let mut main_groups = Vec::new();
++    if !top.is_empty() {
++        main_groups.push(Group::new(top, active));
++    }
++    if !below.is_empty() {
++        let layers = below.iter().position(|p| p == "layers").unwrap_or(0);
++        main_groups.push(Group::new(below, layers));
++    }
+     let mut columns = Vec::new();
+     if !panels.is_empty() {
+         columns.push(Column {
+-            groups: vec![Group::new(panels, active)],
++            groups: main_groups,
+             width: main_width(width),
+             iconic: collapsed,
+             iconic_width: Some(ICON_WIDTH),
+         });
+     }
+-    let groups: Vec<Group<String>> = ICON_PANEL_GROUPS.iter().filter_map(|g| placed.group(g)).collect();
++    let groups: Vec<Group<String>> = STUDENT_ICON_GROUPS.iter().filter_map(|g| placed.group(g)).collect();
+     if !groups.is_empty() {
+         columns.push(Column { groups, width: COLUMN_WIDTH, iconic: true, iconic_width: Some(ICON_WIDTH) });
+     }
+@@ -1496,3 +1506,7 @@ mod tests;
+ 
+ #[cfg(all(test, not(target_arch = "wasm32")))]
+ mod native_tests;
++
++/// School build: the icon column's panels in a new workspace (every panel stays in the Window menu).
++const STUDENT_ICON_GROUPS: &[&[&str]] =
++    &[&["color", "swatches"], &["stroke", "gradient", "transparency"], &["align", "pathfinder"], &["character", "paragraph"], &["history"]];
+diff --git a/crates/ui-egui/src/toolbar.rs b/crates/ui-egui/src/toolbar.rs
+index 6a90cdf..14f21fa 100644
+--- a/crates/ui-egui/src/toolbar.rs
++++ b/crates/ui-egui/src/toolbar.rs
+@@ -32,38 +32,24 @@ const STRIP_BUTTON: egui::Vec2 = vec2(32.0, PITCH);
+ 
+ /// The Basic toolbar: (category, slots); each slot is a flyout group (first = default).
+ pub const BASIC: &[(&str, &[&[&str]])] = &[
+-    ("Select", &[&["selection"], &["directSelection", "groupSelection"], &["lasso", "magicWand"]]),
+-    (
+-        "Shapes",
+-        &[
+-            &["rectangle", "roundedRectangle", "star", "lineSegment", "arc", "spiral", "rectangularGrid", "polarGrid", "flare"],
+-            &["ellipse"],
+-            &["polygon"],
+-            &["shaper"],
+-        ],
+-    ),
++    // School build (scripts/patch_student_layout.py): the everyday tools only; the rest are in the
++    // ••• All Tools drawer and the Advanced toolbar.
++    ("Select", &[&["selection"], &["directSelection", "groupSelection"]]),
++    ("Shapes", &[&["rectangle", "roundedRectangle"], &["ellipse"], &["polygon", "star"], &["lineSegment", "arc", "spiral"]]),
+     (
+         "Draw",
+         &[
+-            &["pencil", "smooth", "pathEraser", "join"],
+-            &["eraser", "scissors", "knife", "mirrorCut", "lineCut", "rectCut"],
+-            &["paintbrush", "blobBrush"],
+             &["pen", "addAnchor", "deleteAnchor", "anchorPoint"],
+             &["curvature"],
++            &["pencil", "smooth"],
++            &["paintbrush", "blobBrush"],
++            &["eraser", "scissors", "knife"],
+         ],
+     ),
+-    (
+-        "Modify",
+-        &[
+-            &["width", "warp", "twirl", "pucker", "bloat", "scallop", "crystallize", "wrinkle"],
+-            &["rotate", "reflect", "scale", "shear", "reshape", "freeTransform", "puppetWarp"],
+-            &["shapeBuilder", "livePaintBucket", "livePaintSelection", "blend"],
+-            &["dimension"],
+-        ],
+-    ),
+-    ("Type", &[&["areaType", "typeOnPath", "verticalAreaType", "verticalTypeOnPath"], &["type", "verticalType", "touchType"]]),
+-    ("Navigate", &[&["zoom"], &["hand", "printTiling"], &["rotateView"]]),
+-    ("Color", &[&["gradient", "mesh"], &["eyedropper", "measure"]]),
++    ("Modify", &[&["rotate", "reflect"], &["scale", "shear"], &["shapeBuilder", "livePaintBucket"]]),
++    ("Type", &[&["type", "typeOnPath", "areaType"]]),
++    ("Color", &[&["eyedropper"], &["gradient"]]),
++    ("Navigate", &[&["hand"], &["zoom"]]),
+ ];
+ 
+ pub(crate) fn tip(t: &ToolInfo) -> String {

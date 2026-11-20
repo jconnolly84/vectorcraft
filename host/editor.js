@@ -3,6 +3,10 @@
   const frame = document.getElementById('editor');
   if (!frame.src) frame.src = './vectorcraft/' + window.location.search + window.location.hash;
   // Closing the font panel returns keyboard focus to the editor.
-  const panel = document.getElementById('font-tools');
-  panel.addEventListener('toggle', () => { if (!panel.open) frame.focus(); });
+  for (const panel of document.querySelectorAll('#host-toolbar details')) {
+    panel.addEventListener('toggle', () => {
+      if (panel.open) document.querySelectorAll('#host-toolbar details').forEach(other => { if (other !== panel) other.open = false; });
+      else frame.focus();
+    });
+  }
 })();

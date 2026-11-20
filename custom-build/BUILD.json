@@ -3,10 +3,13 @@
   "upstream_ref": "f4922aa7ac99a4f6d56fc68a83a44945207ec610",
   "version": "0.24.1",
   "craft_fonts_ref": "b076417b5880bd4154bd22f00695b1d28c6bea83",
-  "workflow_run": 44739906832,
-  "built": "2026-11-20T13:16:55+00:00",
-  "patch": "scripts/patch_vectorcraft_source.py",
-  "zip_sha256": "a86c4db72251eaed3977302f8625363fb7a40d92cb858946830482eb56379aa1",
+  "workflow_run": 44748887271,
+  "built": "2026-11-20T14:11:42+00:00",
+  "patches": [
+    "scripts/patch_vectorcraft_source.py",
+    "scripts/patch_student_layout.py"
+  ],
+  "zip_sha256": "0a99c1b99a8e3a9a74c0ae6bc995f4ff2489a4e03042230820c70448100fe031",
   "files": {
     ".htaccess": "2660940c9af97845dfd475cf1daa2ff1df18afb0bd91471e74e60d677fab2c6a",
     "ASSETS.md": "ac2ebd006a0422f98c94631b2acbe6dd4a9500e1da5e190f096a27c202ca2fbd",
@@ -38,7 +41,7 @@
     "icons/256/ai.storyteller.vectorcraft.png": "440a9a0d31ea3e098a6bd2806046ea936005a008742e4cc97c0adba2574a0825",
     "icons/32/ai.storyteller.vectorcraft.png": "da8689a9ea40b176e2167fe3d4f2b9c87144771d583e5d4033a8b2c0f185f7bd",
     "icons/ai.storyteller.vectorcraft.svg": "caf794e769614d2661e31c2b549f39777474157905c75ffac2c0f72d529ab496",
-    "index.html": "896a5dfd3726db97391a8a8146ac88acb28ce3f87440bd02bb9ced673b6a370c",
+    "index.html": "8acd46b5f5737f52f7cf4455141bd23fbe947812e5e96141e28a0f646f53a821",
     "licenses/pdf-backend/hayro-cmap/LICENSE-APACHE": "0cec06e0e55fbc3dc5cee4fca9b607f66cb8f4e4dbcf3b3c013594dd156732e9",
     "licenses/pdf-backend/hayro-cmap/LICENSE-MIT": "51b50e6120c344dcc146bbd6375ca1c78e079d97c8bea76e67a53d6ff0efebac",
     "licenses/pdf-backend/hayro-cmap/LICENSE.txt": "742665db9c8e1bc72603c6d319ca3e90b83bd6d95202f0cd4ef11068a07a9c29",
@@ -51,7 +54,8 @@
     "licenses/pdf-backend/hayro-syntax/LICENSE-APACHE": "0cec06e0e55fbc3dc5cee4fca9b607f66cb8f4e4dbcf3b3c013594dd156732e9",
     "licenses/pdf-backend/hayro-syntax/LICENSE-MIT": "51b50e6120c344dcc146bbd6375ca1c78e079d97c8bea76e67a53d6ff0efebac",
     "snippets/eframe-d31a8450ea12dfc1/inline0.js": "22a98f9d0c5a0532d291bdc9a3050439420b3d11143b4568fcfd3c66fff36995",
-    "vectorcraft-web-aae8ec946f71cf59.js": "ef8a6a31d81d913d68fc74c5979961f68e7a87e2ffda5d05b0e5d21eab63ae6c",
-    "vectorcraft-web-aae8ec946f71cf59_bg.wasm": "86d81bcfaa5bce4b5c2631cf1b44f14cf469780d0d8151b87360cf2ebec65b38"
+    "snippets/vectorcraft-web-0275e3fac37f6f02/inline0.js": "f1621a1c926258e293d1bcd5d144fad78b1ba2aea3a39f7a120a1f788b717ee1",
+    "vectorcraft-web-fa92bc937edb82e9.js": "db50191a45dae21b20537324d5f124d6d1aebd4c299a7bd5f97e163e74defb7c",
+    "vectorcraft-web-fa92bc937edb82e9_bg.wasm": "19e51077b05d776ccb97312cff629494f5b5434af9698d9b3bd84f4e8fa8bfee"
   }
 }
