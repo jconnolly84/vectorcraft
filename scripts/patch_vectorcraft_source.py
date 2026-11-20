@@ -327,6 +327,15 @@ replace_once(web_rs, '    fn list(&self) -> Result<Vec<String>, String> {\n     
              '        let s = local_storage()?;\n')
 replace_once(web_rs, '    fn read(&self, name: &str) -> Result<Vec<u8>, String> {\n',
              '    fn read(&self, name: &str) -> Result<Vec<u8>, String> {\n'
+             '        // School build: where the browser has Web Locks, a tab holds its area\'s lock until it is\n'
+             '        // closed or crashes, so an area whose lock nobody holds has no running tab: its heartbeat is\n'
+             '        // ignored and its copies are offered at once (upstream waits until the heartbeat is three\n'
+             '        // minutes old, so a student reopening straight after a crash would not be offered them).\n'
+             '        if let Some(area) = name.strip_suffix("/heartbeat")\n'
+             '            && self.locks.as_ref().is_some_and(|l| !l.held(area))\n'
+             '        {\n'
+             '            return Err(format!("{name}: no tab holds this area"));\n'
+             '        }\n'
              '        if let Some(r) = idb_recovery::read(name) {\n            return r;\n        }\n')
 replace_once(web_rs, '    fn write(&self, name: &str, bytes: &[u8]) -> Result<(), String> {\n',
              '    fn write(&self, name: &str, bytes: &[u8]) -> Result<(), String> {\n'
