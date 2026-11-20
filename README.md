@@ -4,7 +4,7 @@ Online VectorCraft for students: https://jconnolly84.github.io/vectorcraft/
 
 - **Editor:** the official [storytold/vectorcraft](https://github.com/storytold/vectorcraft) v0.24.1
   web release, rebuilt with one small patch so it also loads the school font library.
-- **Fonts:** the same 148 font families (271 faces) as the PhotoCraft site, in `font-library/`
+- **Fonts:** the same 148 font families (270 faces) as the PhotoCraft site, in `font-library/`
   with their licences. They load in the background when the editor opens and appear in
   VectorCraft's font menus.
 - **Top toolbar:** Fonts & import (load .ttf/.otf files, use fonts installed on this PC, browse

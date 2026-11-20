@@ -1,0 +1,151 @@
+diff --git a/apps/vectorcraft-web/src/fonts.rs b/apps/vectorcraft-web/src/fonts.rs
+index 2677c11..b9c3c5b 100644
+--- a/apps/vectorcraft-web/src/fonts.rs
++++ b/apps/vectorcraft-web/src/fonts.rs
+@@ -61,7 +61,7 @@ pub fn spawn_background_fonts(ctx: egui::Context) {
+ 
+ /// Fetch one face and add it to the font database. False (and a console warning) on failure.
+ async fn load(f: &WebFont, timeout_ms: i32) -> bool {
+-    let bytes = match fetch(f.url, f.integrity, timeout_ms).await {
++    let bytes = match fetch(f.url, Some(f.integrity), timeout_ms).await {
+         Ok(bytes) => bytes,
+         Err(e) => {
+             log::warn!("web font {} {}: {e}", f.family, f.style);
+@@ -77,12 +77,14 @@ async fn load(f: &WebFont, timeout_ms: i32) -> bool {
+ 
+ /// GET `url` (relative to the page) with Subresource Integrity `integrity`, aborted after
+ /// `timeout_ms`.
+-async fn fetch(url: &str, integrity: &str, timeout_ms: i32) -> Result<Vec<u8>, String> {
++async fn fetch(url: &str, integrity: Option<&str>, timeout_ms: i32) -> Result<Vec<u8>, String> {
+     let window = web_sys::window().ok_or("no window")?;
+     let abort = web_sys::AbortController::new().map_err(js)?;
+     let init = web_sys::RequestInit::new();
+     init.set_method("GET");
+-    init.set_integrity(integrity);
++    if let Some(integrity) = integrity {
++        init.set_integrity(integrity);
++    }
+     init.set_signal(Some(&abort.signal()));
+     let on_timeout = {
+         let abort = abort.clone();
+@@ -107,3 +109,108 @@ async fn fetch(url: &str, integrity: &str, timeout_ms: i32) -> Result<Vec<u8>, S
+ fn js(e: wasm_bindgen::JsValue) -> String {
+     format!("{e:?}")
+ }
++
++// ---- School font library (added by jconnolly84/vectorcraft's scripts/patch_vectorcraft_source.py) ----
++
++/// Library faces fetched at once.
++const LIBRARY_PARALLEL: usize = 6;
++
++thread_local! {
++    static LIBRARY_STARTED: Cell<bool> = const { Cell::new(false) };
++}
++
++/// One face from `fonts/manifest.txt`.
++struct LibraryFont {
++    family: String,
++    style: String,
++    url: String,
++    integrity: Option<String>,
++}
++
++/// Parse `family | style | file | scripts | licence | licence file | sha256 | source` rows (only the
++/// first three are required). Files must be relative paths under `fonts/`.
++fn parse_library(text: &str) -> Vec<LibraryFont> {
++    text.lines()
++        .map(str::trim)
++        .filter(|l| !l.is_empty() && !l.starts_with('#'))
++        .filter_map(|l| {
++            let f: Vec<&str> = l.split('|').map(str::trim).collect();
++            let (family, style, url) = (*f.first()?, *f.get(1)?, *f.get(2)?);
++            if family.is_empty() || !url.starts_with("fonts/") || url.contains("..") || url.contains("://") {
++                return None;
++            }
++            let integrity = f.get(6).and_then(|sha| vectorcraft_text_sri(sha));
++            Some(LibraryFont { family: family.into(), style: style.into(), url: url.into(), integrity })
++        })
++        .collect()
++}
++
++/// `sha256-<base64>` for a 64-digit hex SHA-256.
++fn vectorcraft_text_sri(hex: &str) -> Option<String> {
++    use base64_lite as b64;
++    if hex.len() != 64 {
++        return None;
++    }
++    let bytes: Option<Vec<u8>> = (0..32).map(|i| hex.get(2 * i..2 * i + 2).and_then(|h| u8::from_str_radix(h, 16).ok())).collect();
++    Some(format!("sha256-{}", b64::encode(&bytes?)))
++}
++
++mod base64_lite {
++    pub fn encode(data: &[u8]) -> String {
++        const T: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++        let mut s = String::with_capacity(data.len().div_ceil(3) * 4);
++        for chunk in data.chunks(3) {
++            let b = |i: usize| u32::from(chunk.get(i).copied().unwrap_or(0));
++            let n = (b(0) << 16) | (b(1) << 8) | b(2);
++            for k in 0..4 {
++                if k <= chunk.len() {
++                    s.push(char::from(T[((n >> (18 - 6 * k)) & 63) as usize]));
++                } else {
++                    s.push('=');
++                }
++            }
++        }
++        s
++    }
++}
++
++/// Fetch `fonts/manifest.txt` and every face it lists, [`LIBRARY_PARALLEL`] at a time, asking `ctx`
++/// for a frame after each so the font menus pick it up. A missing manifest does nothing. Only the
++/// first call does anything.
++pub fn spawn_library_fonts(ctx: egui::Context) {
++    if LIBRARY_STARTED.with(|s| s.replace(true)) {
++        return;
++    }
++    wasm_bindgen_futures::spawn_local(async move {
++        let text = match fetch("fonts/manifest.txt", None, STARTUP_TIMEOUT_MS).await {
++            Ok(bytes) => String::from_utf8_lossy(&bytes).into_owned(),
++            Err(e) => {
++                log::info!("school font library: {e}");
++                return;
++            }
++        };
++        let queue = Rc::new(parse_library(&text));
++        log::info!("school font library: {} faces", queue.len());
++        let next = Rc::new(Cell::new(0usize));
++        for _ in 0..LIBRARY_PARALLEL.min(queue.len()) {
++            let (queue, next, ctx) = (queue.clone(), next.clone(), ctx.clone());
++            wasm_bindgen_futures::spawn_local(async move {
++                loop {
++                    let i = next.get();
++                    next.set(i + 1);
++                    let Some(f) = queue.get(i) else { break };
++                    match fetch(&f.url, f.integrity.as_deref(), BACKGROUND_TIMEOUT_MS).await {
++                        Ok(bytes) => {
++                            if FontDb::global().add_font(bytes) == 0 {
++                                log::warn!("library font {} {}: not a font, or already loaded", f.family, f.style);
++                            } else {
++                                ctx.request_repaint();
++                            }
++                        }
++                        Err(e) => log::warn!("library font {} {}: {e}", f.family, f.style),
++                    }
++                }
++            });
++        }
++    });
++}
+diff --git a/apps/vectorcraft-web/src/web.rs b/apps/vectorcraft-web/src/web.rs
+index b4ca434..3bdcc6a 100644
+--- a/apps/vectorcraft-web/src/web.rs
++++ b/apps/vectorcraft-web/src/web.rs
+@@ -116,6 +116,7 @@ async fn run(host: Host, canvas: web_sys::HtmlCanvasElement, moving: Option<Movi
+                 VectorcraftApp::install_ime_reset_hooks(&cc.egui_ctx);
+                 let ctx = &cc.egui_ctx;
+                 crate::fonts::spawn_background_fonts(ctx.clone());
++                crate::fonts::spawn_library_fonts(ctx.clone());
+                 let loss = GraphicsLoss::default();
+                 watch_canvas(&page, &loss, ctx);
+                 if let Some(rs) = &cc.wgpu_render_state {
