@@ -1,0 +1,594 @@
+[
+  {
+    "family": "Abril Fatface",
+    "category": "Serif"
+  },
+  {
+    "family": "Alex Brush",
+    "category": "Script"
+  },
+  {
+    "family": "Alfa Slab One",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Allura",
+    "category": "Script"
+  },
+  {
+    "family": "Amatic SC",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Anonymous Pro",
+    "category": "Monospace"
+  },
+  {
+    "family": "Anton",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Architects Daughter",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Archivo Black",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Arvo",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Astloch",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Audiowide",
+    "category": "Decorative"
+  },
+  {
+    "family": "Bad Comic",
+    "category": "Decorative"
+  },
+  {
+    "family": "Bangers",
+    "category": "Decorative"
+  },
+  {
+    "family": "Barlow",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Bebas Neue",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Bitter",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Black Ops One",
+    "category": "Decorative"
+  },
+  {
+    "family": "Blackcraft",
+    "category": "Decorative"
+  },
+  {
+    "family": "Bodoni Moda",
+    "category": "Serif"
+  },
+  {
+    "family": "Bree Serif",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Bubblez Graffiti",
+    "category": "Decorative"
+  },
+  {
+    "family": "Bungee",
+    "category": "Decorative"
+  },
+  {
+    "family": "Caladea",
+    "category": "Serif"
+  },
+  {
+    "family": "Carlito",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Caveat",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Chewy",
+    "category": "Decorative"
+  },
+  {
+    "family": "Cinzel",
+    "category": "Serif"
+  },
+  {
+    "family": "Comfortaa",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Coming Soon",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Cormorant Garamond",
+    "category": "Serif"
+  },
+  {
+    "family": "Courgette",
+    "category": "Script"
+  },
+  {
+    "family": "Cousine",
+    "category": "Monospace"
+  },
+  {
+    "family": "Coustard",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Creepster",
+    "category": "Decorative"
+  },
+  {
+    "family": "Crete Round",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Crimson Text",
+    "category": "Serif"
+  },
+  {
+    "family": "Cutive Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Dancing Script",
+    "category": "Script"
+  },
+  {
+    "family": "DM Sans",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "DM Serif Display",
+    "category": "Serif"
+  },
+  {
+    "family": "Drybrush",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Eater",
+    "category": "Decorative"
+  },
+  {
+    "family": "EB Garamond",
+    "category": "Serif"
+  },
+  {
+    "family": "Faster One",
+    "category": "Decorative"
+  },
+  {
+    "family": "Fira Code",
+    "category": "Monospace"
+  },
+  {
+    "family": "Fredericka the Great",
+    "category": "Decorative"
+  },
+  {
+    "family": "Fruktur",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Germania One",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Glitch Goblin",
+    "category": "Decorative"
+  },
+  {
+    "family": "Gloria Hallelujah",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Great Vibes",
+    "category": "Script"
+  },
+  {
+    "family": "Grenze Gotisch",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Handlee",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Help Me",
+    "category": "Decorative"
+  },
+  {
+    "family": "IBM Plex Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Inconsolata",
+    "category": "Monospace"
+  },
+  {
+    "family": "Indie Flower",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Inter",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Italianno",
+    "category": "Script"
+  },
+  {
+    "family": "Jacquard 12",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Jacquard 24",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Jacquarda Bastarda 9",
+    "category": "Blackletter"
+  },
+  {
+    "family": "JetBrains Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Jolly Lodger",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Josefin Slab",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Just Another Hand",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Kalam",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Kaushan Script",
+    "category": "Script"
+  },
+  {
+    "family": "Lato",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Lexend",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Liberation Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Liberation Sans",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Liberation Serif",
+    "category": "Serif"
+  },
+  {
+    "family": "Libre Baskerville",
+    "category": "Serif"
+  },
+  {
+    "family": "Libre Caslon Text",
+    "category": "Serif"
+  },
+  {
+    "family": "Lobster",
+    "category": "Script"
+  },
+  {
+    "family": "Lora",
+    "category": "Serif"
+  },
+  {
+    "family": "Luckiest Guy",
+    "category": "Decorative"
+  },
+  {
+    "family": "Manrope",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Marck Script",
+    "category": "Script"
+  },
+  {
+    "family": "MedievalSharp",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Merriweather",
+    "category": "Serif"
+  },
+  {
+    "family": "Monoton",
+    "category": "Decorative"
+  },
+  {
+    "family": "Montserrat",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Neon Sans",
+    "category": "Decorative"
+  },
+  {
+    "family": "Neucha",
+    "category": "Handwritten"
+  },
+  {
+    "family": "New Rocker",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Nosifer",
+    "category": "Decorative"
+  },
+  {
+    "family": "Nunito Sans",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Open Sans",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Orbitron",
+    "category": "Decorative"
+  },
+  {
+    "family": "Oswald",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Outfit",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Overpass Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Pacifico",
+    "category": "Script"
+  },
+  {
+    "family": "Parisienne",
+    "category": "Script"
+  },
+  {
+    "family": "Patrick Hand",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Patua One",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Permanent Marker",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Pirata One",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Playfair Display",
+    "category": "Serif"
+  },
+  {
+    "family": "Poppins",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Prata",
+    "category": "Serif"
+  },
+  {
+    "family": "Press Start 2P",
+    "category": "Decorative"
+  },
+  {
+    "family": "Quicksand",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Raleway",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Rampart One",
+    "category": "Decorative"
+  },
+  {
+    "family": "Righteous",
+    "category": "Decorative"
+  },
+  {
+    "family": "Roboto",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Roboto Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Roboto Slab",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Rock Salt",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Rubik",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Rubik Glitch",
+    "category": "Decorative"
+  },
+  {
+    "family": "Rubik Moonrocks",
+    "category": "Decorative"
+  },
+  {
+    "family": "Rye",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Sacramento",
+    "category": "Script"
+  },
+  {
+    "family": "Sanchez",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Sancreek",
+    "category": "Decorative"
+  },
+  {
+    "family": "Satisfy",
+    "category": "Script"
+  },
+  {
+    "family": "Schoolbell",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Shadows Into Light",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Share Tech Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Slabo 27px",
+    "category": "Slab Serif"
+  },
+  {
+    "family": "Source Code Pro",
+    "category": "Monospace"
+  },
+  {
+    "family": "Source Sans 3",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Source Serif 4",
+    "category": "Serif"
+  },
+  {
+    "family": "Space Grotesk",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Space Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Special Elite",
+    "category": "Decorative"
+  },
+  {
+    "family": "Speed Freak",
+    "category": "Decorative"
+  },
+  {
+    "family": "Stalinist One",
+    "category": "Decorative"
+  },
+  {
+    "family": "Star Minor",
+    "category": "Decorative"
+  },
+  {
+    "family": "Sue Ellen Francisco",
+    "category": "Handwritten"
+  },
+  {
+    "family": "Syne Mono",
+    "category": "Monospace"
+  },
+  {
+    "family": "Tangerine",
+    "category": "Script"
+  },
+  {
+    "family": "UnifrakturCook",
+    "category": "Blackletter"
+  },
+  {
+    "family": "UnifrakturMaguntia",
+    "category": "Blackletter"
+  },
+  {
+    "family": "Urbanist",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Vollkorn",
+    "category": "Serif"
+  },
+  {
+    "family": "VT323",
+    "category": "Monospace"
+  },
+  {
+    "family": "Wallpoet",
+    "category": "Decorative"
+  },
+  {
+    "family": "Westhorn",
+    "category": "Decorative"
+  },
+  {
+    "family": "Work Sans",
+    "category": "Sans Serif"
+  },
+  {
+    "family": "Yellowtail",
+    "category": "Script"
+  },
+  {
+    "family": "Zen Tokyo Zoo",
+    "category": "Decorative"
+  },
+  {
+    "family": "Zilla Slab",
+    "category": "Slab Serif"
+  }
+]

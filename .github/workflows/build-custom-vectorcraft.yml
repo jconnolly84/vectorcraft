@@ -1,0 +1,88 @@
+name: Build custom VectorCraft (school font library)
+
+# Builds the official VectorCraft v0.24.1 web release with one patch
+# (scripts/patch_vectorcraft_source.py): the app also loads the fonts listed in
+# fonts/manifest.txt. The zip is uploaded as an artifact; import it with
+# scripts/import_custom_build.py and commit custom-build/ to deploy it.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  UPSTREAM_REF: f4922aa7ac99a4f6d56fc68a83a44945207ec610 # v0.24.1
+  CRAFT_FONTS_REF: b076417b5880bd4154bd22f00695b1d28c6bea83 # as used by the official v0.24.1 release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CARGO_TERM_COLOR: always
+      CARGO_INCREMENTAL: '0'
+      VECTORCRAFT_VERSION: 0.24.1
+      VECTORCRAFT_BUILD_SHA: f4922aa7ac99a4f6d56fc68a83a44945207ec610-school-fonts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out official VectorCraft v0.24.1 source
+        uses: actions/checkout@v4
+        with:
+          repository: storytold/vectorcraft
+          ref: ${{ env.UPSTREAM_REF }}
+          path: upstream
+          persist-credentials: false
+      - name: Check out craft-fonts (same pin as the official release)
+        uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-fonts
+          ref: ${{ env.CRAFT_FONTS_REF }}
+          path: craft-fonts
+          persist-credentials: false
+      - name: Apply school font library patch
+        run: |
+          python3 scripts/patch_vectorcraft_source.py upstream
+          git -C upstream diff > vectorcraft-source.patch
+          cat vectorcraft-source.patch
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: upstream
+          key: vectorcraft-custom-web
+      - name: Install trunk
+        uses: storytold/craft-common-actions/actions/install-trunk@main
+      - name: Build and package using the upstream script
+        working-directory: upstream
+        env:
+          CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
+          CRAFT_FONTS_REQUIRED: '1'
+        run: |
+          export VECTORCRAFT_BUILD_DATE=$(date -u +%Y-%m-%d)
+          packaging/web/package.sh
+      - name: Record build metadata
+        run: |
+          cp upstream/dist/release/vectorcraft-web-0.24.1.zip .
+          python3 - <<'PY'
+          import json, os, datetime
+          json.dump({
+              'upstream': 'storytold/vectorcraft',
+              'upstream_ref': os.environ['UPSTREAM_REF'],
+              'version': '0.24.1',
+              'craft_fonts_ref': os.environ['CRAFT_FONTS_REF'],
+              'workflow_run': int(os.environ['GITHUB_RUN_ID']),
+              'built': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
+              'patch': 'scripts/patch_vectorcraft_source.py',
+          }, open('BUILD.json', 'w'), indent=2)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vectorcraft-custom-web
+          path: |
+            vectorcraft-web-0.24.1.zip
+            vectorcraft-source.patch
+            BUILD.json
+          if-no-files-found: error
+          retention-days: 30

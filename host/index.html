@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VectorCraft</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <style>
+    html, body { margin: 0; height: 100%; background: #262626; color: #eee; font: 13px system-ui; }
+    body { display: flex; flex-direction: column; }
+    button { color: #eee; background: #383838; border: 1px solid #666; border-radius: 4px; padding: 3px 10px; cursor: pointer; }
+    button:hover { background: #505050; }
+    button:disabled { opacity: .55; cursor: default; }
+    button:focus-visible { outline: 2px solid #9bceff; outline-offset: 2px; }
+    a { color: #9bceff; }
+    iframe { border: 0; width: 100%; flex: 1; min-height: 0; }
+    #host-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 5px 12px; border-bottom: 1px solid #444; }
+    #host-toolbar[hidden], #show-toolbar[hidden] { display: none; }
+    #toolbar-info { margin-right: auto; color: #ccc; }
+    #show-toolbar { position: fixed; top: 0; right: 12px; z-index: 20; opacity: .85; font-size: 11px; }
+    #show-toolbar:hover, #show-toolbar:focus { opacity: 1; }
+    #font-tools { background: #262626; border: 1px solid #777; border-radius: 5px; }
+    #font-tools summary { padding: 5px 10px; cursor: pointer; color: #b9ddff; font-weight: 600; }
+    #font-tools[open] { position: absolute; top: 40px; right: 12px; z-index: 10; width: min(460px, calc(100vw - 48px)); max-height: 75vh; overflow: auto; padding: 12px; box-shadow: 0 3px 15px #0008; }
+    #font-tools h2 { font-size: 15px; }
+    #font-tools p { line-height: 1.4; }
+    #font-tools label { display: block; margin: 10px 0; }
+    #font-tools select, #font-tools input { box-sizing: border-box; width: 100%; padding: 6px; margin-top: 4px; background: #383838; color: #eee; border: 1px solid #777; }
+    #font-list { list-style: none; padding: 0; max-height: 240px; overflow: auto; }
+    #font-list li { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; gap: 8px; border-bottom: 1px solid #444; }
+    #font-list small { display: block; color: #bbb; }
+  </style>
+  <script src="./banner.js" defer></script>
+  <script src="./font-file-info.js" defer></script>
+  <script src="./local-fonts.js" defer></script>
+  <script src="./font-browser.js" defer></script>
+  <script src="./fullscreen.js" defer></script>
+  <script src="./editor.js" defer></script>
+</head>
+<body>
+  <button id="show-toolbar" type="button" aria-controls="host-toolbar" aria-expanded="false" hidden>Show tools</button>
+  <nav id="host-toolbar" aria-label="Editor controls">
+    <span id="toolbar-info">Click the canvas before using shortcuts &middot; <a href="./vectorcraft/NOTICE" target="_blank" rel="noopener">VectorCraft credits</a></span>
+    <details id="font-tools">
+      <summary>Fonts &amp; import</summary>
+      <h2>Load font files</h2>
+      <p>Choose .ttf or .otf files from your computer. They stay in this page session and are not uploaded.</p>
+      <p><strong>Save your work first.</strong> Applying fonts restarts the editor. Load them again after reopening this page.</p>
+      <button id="choose-font-files" type="button">Choose font files...</button>
+      <input id="font-files" type="file" accept=".ttf,.otf,font/ttf,font/otf" multiple hidden>
+      <button id="apply-font-files" type="button" hidden>Apply fonts &amp; restart editor</button>
+      <button id="cancel-font-files" type="button" hidden>Cancel selection</button>
+      <p id="font-file-status" role="status" aria-live="polite"></p>
+      <hr>
+      <h2>Fonts from this PC</h2>
+      <p>Use fonts installed on this PC. Font names and files stay in this browser session; they are not uploaded.</p>
+      <p><strong>Save your work first.</strong> Enabling or disabling PC fonts restarts the editor.</p>
+      <button id="enable-local-fonts" type="button">Use fonts from this PC</button>
+      <button id="disable-local-fonts" type="button" hidden>Stop using PC fonts</button>
+      <p id="local-font-status" role="status" aria-live="polite"></p>
+      <hr>
+      <h2>Browse the font library</h2>
+      <p>All of these fonts are already in VectorCraft's font menus (they finish loading a few seconds after the editor opens). Choose a category, copy a font name, then search for it in the Character panel's font menu.</p>
+      <label>Category<select id="font-category"><option>All categories</option></select></label>
+      <label>Search fonts<input id="font-search" type="search" placeholder="Font name"></label>
+      <p id="font-browser-status" role="status" aria-live="polite"></p>
+      <ul id="font-list"></ul>
+    </details>
+    <button id="fullscreen-toggle" type="button" aria-pressed="false">Full screen</button>
+    <span id="fullscreen-status" role="status" aria-live="polite"></span>
+    <button id="hide-toolbar" type="button" aria-controls="host-toolbar" aria-expanded="true">Hide tools</button>
+  </nav>
+  <iframe id="editor" title="VectorCraft vector editor"
+    allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+</body>
+</html>

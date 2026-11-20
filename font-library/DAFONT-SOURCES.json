@@ -1,0 +1,198 @@
+[
+  {
+    "dafont_page": "https://www.dafont.com/star-minor.font",
+    "download": "https://dl.dafont.com/dl/?f=star_minor",
+    "archive_sha256": "c8ea25ce2c554505def95dff872866d216bfa5080af1acf6fb9d080f464d7752",
+    "license_path": "font-library/fonts/dafont-star-minor/License.txt",
+    "license_sha256": "85207989a71474e6b3736076dae3b0bceb360c3df5bd34094846612cfda95654",
+    "families": [
+      "Star Minor"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-star-minor/StarMinor.ttf",
+        "sha256": "0fe372f6e1fc0dbff6884b9b7263eb327f62c113d73e18d4f35328b3274752dd"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/speed-freak.font",
+    "download": "https://dl.dafont.com/dl/?f=speed_freak",
+    "archive_sha256": "b05fecf8b2a21b844b6201e1b2bdff59d98a82d83fae41f8379a6980abfb65fc",
+    "license_path": "font-library/fonts/dafont-speed-freak/OFL.txt",
+    "license_sha256": "7540553288d201251e2436e2e3a6126d628464b9223e22413c58a75d1eed33cf",
+    "families": [
+      "Speed Freak"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-speed-freak/SpeedFreak-Italic.ttf",
+        "sha256": "c7ff299deedb19e2809a8f7b106ee4f89a4d96fc83a46343fc2e9138b04d06a5"
+      },
+      {
+        "path": "font-library/fonts/dafont-speed-freak/SpeedFreak-Regular.ttf",
+        "sha256": "bfbace8d8b6680cabad94846b0a8ca806fe443694c7e861329be9202a3400917"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/help-me.font",
+    "download": "https://dl.dafont.com/dl/?f=help_me",
+    "archive_sha256": "6a9b185d82a593b34b87f6ad24f6ed227533b7c91153cfe8aed980d7b8a01600",
+    "license_path": "font-library/fonts/dafont-help-me/License.txt",
+    "license_sha256": "d5b8fd63b1d2ed3976477f773d2645e8d6e0636e0eb93589c23676e0dd387189",
+    "families": [
+      "Help Me"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-help-me/HelpMe.ttf",
+        "sha256": "6b412c8e83edc3e7894e2e7232c3b78aff4d6f25097b3ac22ff062dd8990af08"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/blackcraft.font",
+    "download": "https://dl.dafont.com/dl/?f=blackcraft",
+    "archive_sha256": "c41ee54b6ff165a05b1e484fbdce9ba2e94ad652e143070147d693e41588a4df",
+    "license_path": "font-library/fonts/dafont-blackcraft/License.txt",
+    "license_sha256": "51498aa22a9f32d28262bd28a4877efedb9f629f3422fcd8e10495e4770e3208",
+    "families": [
+      "Blackcraft"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-blackcraft/Blackcraft.ttf",
+        "sha256": "e62f6915e014c3bbb163606bd81dfcb0aff41f7d55e1c0f3f9b6b8bb1ba7398e"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/neon-sans.font",
+    "download": "https://dl.dafont.com/dl/?f=neon_sans",
+    "archive_sha256": "0bb150d329cd7cd8ba2c561bc66518a6be637076109e1c99bcc56396187fc5e2",
+    "license_path": "font-library/fonts/dafont-neon-sans/License.txt",
+    "license_sha256": "11ac69517dd1b3f6cb7d25ba449840844e6364e800d9ae664845cd0107f84fb1",
+    "families": [
+      "Neon Sans"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-neon-sans/NeonSans.ttf",
+        "sha256": "5b818daf8945d7fe2d8985d423667a9cf5f92b23fb0cbc9cabf89efec0787975"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/glitch-goblin.font",
+    "download": "https://dl.dafont.com/dl/?f=glitch_goblin",
+    "archive_sha256": "4d707a21c6138ed2c7a8066ca7b20eae725e99efc7f78810570937b5eff0e90d",
+    "license_path": "font-library/fonts/dafont-glitch-goblin/License.txt",
+    "license_sha256": "c98f3f95dd397939ffa5beb791ca2131d8fe87ac23613e430b8ec2b20f62f4df",
+    "families": [
+      "Glitch Goblin"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-glitch-goblin/GlitchGoblin.ttf",
+        "sha256": "01a73b57c0b5e7d1dd7ef22b3187a7aaf086f58cf7c2508b4f08184dfdb56a61"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/drybrush.font",
+    "download": "https://dl.dafont.com/dl/?f=drybrush",
+    "archive_sha256": "014aed0e1997a9f648961bbdedaa031ce1850aa8f2a590f83338b87394b5ebc8",
+    "license_path": "font-library/fonts/dafont-drybrush/License.txt",
+    "license_sha256": "f4e7f373b9b996950337e8d41a4a2939c2d90b7725e9baf3d5084a22717ad328",
+    "families": [
+      "Drybrush"
+    ],
+    "license": "CC0-1.0",
+    "category": "Handwritten",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-drybrush/Drybrush.ttf",
+        "sha256": "f289203284e6db3039d3e2bec95461305a00f5c35ad7c45631b6bc8448dd5906"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/bad-comic.font",
+    "download": "https://dl.dafont.com/dl/?f=bad_comic",
+    "archive_sha256": "29f13bb86f65171c846ba3d215da1d8c733278819703ce4b737eddb501780aff",
+    "license_path": "font-library/fonts/dafont-bad-comic/License.txt",
+    "license_sha256": "5d4189fb9044e6ed27e75f466426500df1a524d68a3242ff60f6e6b79ec25f43",
+    "families": [
+      "Bad Comic"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-bad-comic/BadComic-Italic.ttf",
+        "sha256": "5fa9611614dfbc35f39ce6376fed6d48f3875fa707309c6c911f34a7d0031cad"
+      },
+      {
+        "path": "font-library/fonts/dafont-bad-comic/BadComic-Regular.ttf",
+        "sha256": "e6fbcf7f21c44fd295de234edf017e6eb6ef40e8a5f19e12df7ccb3918c205dc"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/bubblez-graffiti.font",
+    "download": "https://dl.dafont.com/dl/?f=bubblez_graffiti",
+    "archive_sha256": "411a926a72e6029cc89d91054c7adcb02168b5029807e3c1a39a3183a6ff9b33",
+    "license_path": "font-library/fonts/dafont-bubblez-graffiti/License.txt",
+    "license_sha256": "7fc551b217af30c2dc5c49b076aab9ae64e4bc12dbc5063f48c600f82948d0e2",
+    "families": [
+      "Bubblez Graffiti"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-bubblez-graffiti/BubblezGraffiti-Italic.ttf",
+        "sha256": "8fc18d605913479b3789f24544edb33ccdab01dae2068abc55da27ff9c86f535"
+      },
+      {
+        "path": "font-library/fonts/dafont-bubblez-graffiti/BubblezGraffiti-Regular.ttf",
+        "sha256": "c3cd0ee899384547433c3bc66eed752cfb1a12a7e25113dde7b6d202cf7b4831"
+      }
+    ]
+  },
+  {
+    "dafont_page": "https://www.dafont.com/westhorn.font",
+    "download": "https://dl.dafont.com/dl/?f=westhorn",
+    "archive_sha256": "dd5acb4a3c9ff483a66e849eda6927646bc8e83f1cf654c9782ea73fb903edb8",
+    "license_path": "font-library/fonts/dafont-westhorn/License.txt",
+    "license_sha256": "b0c589e0cb282f17b2560c988ee9fdf5b92892508dd44ac1b5313e777fb051f7",
+    "families": [
+      "Westhorn"
+    ],
+    "license": "OFL-1.1",
+    "category": "Decorative",
+    "files": [
+      {
+        "path": "font-library/fonts/dafont-westhorn/Westhorn-Regular.ttf",
+        "sha256": "d551f5452b7ca2ab0414368339bad28bcb2fd06447aaa49ab7d3b2003577d250"
+      },
+      {
+        "path": "font-library/fonts/dafont-westhorn/Westhorn-Italic.ttf",
+        "sha256": "f357318682684d0785c9cc4d284c23e6479f7fe88e105a3b1a547befc6ac797a"
+      }
+    ]
+  }
+]
